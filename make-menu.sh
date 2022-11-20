@@ -19,5 +19,5 @@ do
         # Without a `-trim`, interlinear spacing of 10 seems to work, but that is probably at best a happy accident.
         # For `png:color-type=3` see PNG color depth: https://www.w3.org/TR/png/#11IHDR
         magick -background black -fill transparent -interline-spacing $spacing -font Helvetica -size x460 label:@- -resize '700x>' \
-            -background $color -flatten -repage 720x480 -repage +'%[fx:(%[W]-%[w])/2]+%[fx:(%[H]-%[h])/2]' -define png:color-type=3 -colors 8 -type Palette +write png8:all-$color.png -crop 1x10@ tile-$color-%d.png
+            -background $color -flatten -repage 720x480 -repage +'%[fx:(%[W]-%[w])/2]+%[fx:(%[H]-%[h])/2]' -define png:color-type=3 -colors 4 -type Palette +write png8:all-$color.png -crop 1x10@ tile-$color-%d.png
 done
