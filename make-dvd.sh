@@ -7,6 +7,11 @@ here=$(dirname $0)
 tempbase=$(mktemp -d dvdauthor.XXXXXX)
 outdir=$tempbase/dvd
 state=$tempbase/tmp
+
+(
+trap "rm -rf $outdir" EXIT
+
+(
 trap "rm -rf $state" EXIT
 
 mkdir -p $outdir $state
@@ -75,8 +80,10 @@ EOF
 
 echo >&2 "Authoring DVD ..."
 VIDEO_FORMAT=NTSC dvdauthor -o $outdir -x $state/dvd.xml
+)
 
 $here/burn-dvd.sh $outdir "${DVD_TITLE:-}"
+)
 
 echo >&2 -n "Result: "
 realpath $outdir
