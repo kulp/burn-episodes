@@ -10,7 +10,8 @@ remove_last_newline ()
     perl -ne 'print $last if $.>1; $last = $_; END{chomp $last; print $last}' "$@"
 }
 
-cd $(mktemp -d)
+orig_pwd=$(pwd)
+cd $(mktemp -d menu.XXXXXX)
 
 spacing=10
 basename -a "${filenames[@]%.*}" |
@@ -42,4 +43,4 @@ dd if=/dev/zero bs=4 count=1000 |
 mplex -f 8 -o output.mpg black.m2v output.m2a
 spumux menu.xml < output.mpg > menu.mpg
 )
-realpath menu.mpg
+realpath --relative-to=$orig_pwd menu.mpg

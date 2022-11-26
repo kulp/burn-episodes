@@ -4,8 +4,10 @@
 set -o errexit -o nounset -o pipefail
 
 here=$(dirname $0)
-outdir=$(realpath $(mktemp -d dvdauthor.XXXXXX))
-state=$(mktemp -d)
+tempbase=$(mktemp -d dvdauthor.XXXXXX)
+outdir=$tempbase/dvd
+state=$tempbase/tmp
+mkdir -p $outdir $state
 echo >&2 "Generating output in $outdir"
 echo >&2 "Temporary files are in $state"
 
@@ -30,9 +32,11 @@ for f in "$@"
 do
     echo >&2 "Converting $f ..."
     out="$state/$(basename "${f%.???}").mpg"
-    (cd "$(mktemp -d)"
+    (
+        absolute="$(realpath "$out")"
+        cd "$(mktemp -d $state/mpg.XXXXXX)"
         ffmpeg -y -i "$f" "${ffmpeg_flags[@]}" -an -pass 1 /dev/null
-        ffmpeg    -i "$f" "${ffmpeg_flags[@]}"     -pass 2 "$out"
+        ffmpeg    -i "$f" "${ffmpeg_flags[@]}"     -pass 2 "$absolute"
     )
     converted+=( "$out" )
     echo >&2 "done converting $f."
