@@ -36,8 +36,13 @@ do
     (
         absolute="$(realpath "$out")"
         cd "$(mktemp -d $state/mpg.XXXXXX)"
-        ffmpeg -y -i "$f" "${ffmpeg_flags[@]}" -an -pass 1 /dev/null
-        ffmpeg    -i "$f" "${ffmpeg_flags[@]}"     -pass 2 "$absolute"
+        if [[ ${TWOPASS:-} ]]
+        then
+            ffmpeg -y -i "$f" "${ffmpeg_flags[@]}" -an -pass 1 /dev/null
+            ffmpeg    -i "$f" "${ffmpeg_flags[@]}"     -pass 2 "$absolute"
+        else
+            ffmpeg -y -i "$f" "${ffmpeg_flags[@]}" "$absolute"
+        fi
     )
     converted+=( "$out" )
     echo >&2 "done converting $f."
