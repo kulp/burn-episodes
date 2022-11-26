@@ -7,6 +7,8 @@ here=$(dirname $0)
 tempbase=$(mktemp -d dvdauthor.XXXXXX)
 outdir=$tempbase/dvd
 state=$tempbase/tmp
+trap "rm -rf $state" EXIT
+
 mkdir -p $outdir $state
 echo >&2 "Generating output in $outdir"
 echo >&2 "Temporary files are in $state"
