@@ -10,6 +10,8 @@ remove_last_newline ()
     perl -ne 'print $last if $.>1; $last = $_; END{chomp $last; print $last}' "$@"
 }
 
+cd $(mktemp -d)
+
 spacing=10
 (IFS=$'\n'; echo "${filenames[*]}") |
     remove_last_newline |
