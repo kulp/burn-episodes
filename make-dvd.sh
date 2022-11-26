@@ -71,7 +71,7 @@ cat > $state/dvd.xml <<EOF
     </menus>
     <titles>                            $(for f in "${converted[@]}"; do echo "
       <pgc pause='inf'>
-        <vob file='$f'/>
+        <vob file=\"$f\"/>
       </pgc>                            "; done)
     </titles>
   </titleset>
