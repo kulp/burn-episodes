@@ -23,8 +23,9 @@ basename -a "${filenames[@]%.*}" |
 cat <<EOF | xmllint --pretty 1 - > menu.xml
 <subpictures>
   <stream>
-    <spu start="0" image="all.png" highlight="all-invert.png" force="yes">$(identify -format '
-      <button x0="%[fx:%[X]]" y0="%[fx:%[Y]]" x1="%w" y1="%[fx:%[h]+%[Y]]"/>\n' tile-*.png)
+    <spu start="0" image="all.png" highlight="all-invert.png" force="yes">
+      $(identify -set option:ys '%[fx:%[Y]]' -set option:ye '%[fx:%[h]+%[Y]]]' -format '
+      <button x0="%[fx:%[X]]" y0="%[fx:%[ys]+%[ys]%2]" x1="%w" y1="%[fx:%[ye]-%[ye]%2]"/>\n' tile-*.png)
     </spu>
   </stream>
 </subpictures>
