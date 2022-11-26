@@ -76,5 +76,7 @@ EOF
 echo >&2 "Authoring DVD ..."
 VIDEO_FORMAT=NTSC dvdauthor -o $outdir -x $state/dvd.xml
 
+$here/burn-dvd.sh $outdir "${DVD_TITLE:-}"
+
 echo >&2 -n "Result: "
 realpath $outdir
