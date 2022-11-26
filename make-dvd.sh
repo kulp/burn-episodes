@@ -17,7 +17,8 @@ ffmpeg_flags=(
     -target ntsc-dvd
 
     -aspect 4:3
-    -b:v 2010k
+    -b:v 1976k
+    -bufsize 4M
 
     -acodec mp2
     # Reducing the sample rate might theoretically help avoid wasting our
