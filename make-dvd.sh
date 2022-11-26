@@ -3,6 +3,14 @@
 # Fail early and loudly.
 set -o errexit -o nounset -o pipefail
 
+here=$(dirname $0)
+outdir=$(realpath $(mktemp -d dvdauthor.XXXXXX))
+state=$(mktemp -d)
+echo >&2 "Generating output in $outdir"
+echo >&2 "Temporary files are in $state"
+
+converted=( )
+
 ffmpeg_flags=(
     -target ntsc-dvd
 
@@ -18,14 +26,43 @@ ffmpeg_flags=(
     -b:a 112k
 )
 
-state=$(mktemp -d)
-
-echo "$state"
 for f in "$@"
 do
+    echo >&2 "Converting $f ..."
     out="$state/$(basename "${f%.???}").mpg"
     (cd "$(mktemp -d)"
         ffmpeg -y -i "$f" "${ffmpeg_flags[@]}" -an -pass 1 /dev/null
         ffmpeg    -i "$f" "${ffmpeg_flags[@]}"     -pass 2 "$out"
     )
+    converted+=( "$out" )
+    echo >&2 "done converting $f."
 done
+
+echo >&2 "Making menus ..."
+menu_mpg=$($here/make-menu.sh "${converted[@]}")
+
+cat > $state/dvd.xml <<EOF
+<?xml version="1.0"?>
+<dvdauthor>
+  <vmgm/>
+  <titleset>
+    <menus>
+      <pgc pause="inf">
+        <vob file="$menu_mpg"/>         $(for i in $(seq 1 $#); do echo "
+        <button>jump title $i;</button> "; done)
+      </pgc>
+    </menus>
+    <titles>                            $(for f in "${converted[@]}"; do echo "
+      <pgc pause='inf'>
+        <vob file='$f'/>
+      </pgc>                            "; done)
+    </titles>
+  </titleset>
+</dvdauthor>
+EOF
+
+echo >&2 "Authoring DVD ..."
+VIDEO_FORMAT=NTSC dvdauthor -o $outdir -x $state/dvd.xml
+
+echo >&2 -n "Result: "
+realpath $outdir
