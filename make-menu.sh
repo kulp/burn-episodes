@@ -19,3 +19,13 @@ basename -a "${filenames[@]%.*}" |
     # For `png:color-type=3` see PNG color depth: https://www.w3.org/TR/png/#11IHDR
     magick -background black -fill white -interline-spacing $spacing -font Helvetica -size 'x460>' label:@- -resize '720x>' \
         -repage 720x480 -repage +'%[fx:(%[W]-%[w])/2]+%[fx:(%[H]-%[h])/2]' -type Grayscale -colors 4 +write mpr:all \( mpr:all -crop 1x10@ +write tile-%d.png \) \( mpr:all -gravity center -extent 720x480 +write all.png -negate +write all-invert.png \) null:
+
+cat <<EOF | xmllint --pretty 1 - > menu.xml
+<subpictures>
+  <stream>
+    <spu start="0" image="all.png" highlight="all-invert.png" force="yes">$(identify -format '
+      <button x0="%[fx:%[X]]" y0="%[fx:%[Y]]" x1="%w" y1="%[fx:%[h]+%[Y]]"/>\n' tile-*.png)
+    </spu>
+  </stream>
+</subpictures>
+EOF
