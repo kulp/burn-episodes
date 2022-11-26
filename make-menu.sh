@@ -40,7 +40,7 @@ magick -size 720x480 canvas:black -depth 8 ppm:- |
     mpeg2enc -o black.m2v
 dd if=/dev/zero bs=4 count=1000 |
     lame -r -b 128 -s 48000 - output.m2a
-mplex -f 8 -o output.mpg black.m2v output.m2a
-spumux menu.xml < output.mpg > menu.mpg
+mplex -f 8 -o /dev/stdout black.m2v output.m2a |
+    spumux menu.xml > menu.mpg
 )
 realpath --relative-to=$orig_pwd menu.mpg
