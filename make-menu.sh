@@ -13,7 +13,7 @@ remove_last_newline ()
 cd $(mktemp -d)
 
 spacing=10
-(IFS=$'\n'; echo "${filenames[*]}") |
+(IFS=$'\n'; echo "${filenames[*]%.*}") |
     remove_last_newline |
     # Without a `-trim`, interlinear spacing of 10 seems to work, but that is probably at best a happy accident.
     # For `png:color-type=3` see PNG color depth: https://www.w3.org/TR/png/#11IHDR
