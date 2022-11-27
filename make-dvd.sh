@@ -61,7 +61,9 @@ menu_mpg=$($here/make-menu.sh "${converted[@]}")
 cat > $state/dvd.xml <<EOF
 <?xml version="1.0"?>
 <dvdauthor>
-  <vmgm/>
+  <vmgm>
+    <fpc>jump titleset 1 menu;</fpc>
+  </vmgm>
   <titleset>
     <menus>
       <pgc pause="inf">
