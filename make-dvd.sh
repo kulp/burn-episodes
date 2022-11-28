@@ -27,13 +27,9 @@ ffmpeg_flags=(
     -b:v 1976k
     -bufsize 4M
 
-    -acodec mp2
-    # Reducing the sample rate might theoretically help avoid wasting our
-    # (intentionally constrained) audio bandwidth, but appears to cause
-    # dvdauthor to choke for lack of sufficient NAV frames (?).
-    #-ar 24000
+    -acodec ac3
     -ac 1
-    -b:a 112k
+    -b:a 128k
 )
 
 for f in "$@"
