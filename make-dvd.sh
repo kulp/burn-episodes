@@ -24,7 +24,7 @@ ffmpeg_flags=(
     -target ntsc-dvd
 
     -aspect 4:3
-    -b:v 1976k
+    -b:v "(${BITRATE_MULTIPLIER:-1.0} * ${BITRATE:-1976k})"
     -bufsize 4M
 
     -acodec ac3
