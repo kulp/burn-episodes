@@ -3,7 +3,7 @@
 # Fail early and loudly.
 set -o errexit -o nounset -o pipefail
 
-here=$(dirname $0)
+here=$(dirname "$0")
 tempbase=$(mktemp -d dvdauthor.XXXXXX)
 outdir=$tempbase/dvd
 state=$tempbase/tmp
@@ -14,7 +14,7 @@ trap "rm -rf $outdir" EXIT
 (
 trap "rm -rf $state" EXIT
 
-mkdir -p $outdir $state
+mkdir -p "$outdir" "$state"
 echo >&2 "Generating output in $outdir"
 echo >&2 "Temporary files are in $state"
 
@@ -38,7 +38,7 @@ do
     out="$state/$(basename "${f%.???}").mpg"
     (
         absolute="$(realpath "$out")"
-        cd "$(mktemp -d $state/mpg.XXXXXX)"
+        cd "$(mktemp -d "$state"/mpg.XXXXXX)"
         if [[ ${TWOPASS:-} ]]
         then
             ffmpeg -y -i "$f" "${ffmpeg_flags[@]}" -an -pass 1 /dev/null
@@ -52,9 +52,9 @@ do
 done
 
 echo >&2 "Making menus ..."
-menu_mpg=$($here/make-menu.sh "${converted[@]}")
+menu_mpg=$("$here"/make-menu.sh "${converted[@]}")
 
-cat > $state/dvd.xml <<EOF
+cat > "$state"/dvd.xml <<EOF
 <?xml version="1.0"?>
 <dvdauthor>
   <vmgm>
@@ -78,11 +78,11 @@ cat > $state/dvd.xml <<EOF
 EOF
 
 echo >&2 "Authoring DVD ..."
-VIDEO_FORMAT=NTSC dvdauthor -o $outdir -x $state/dvd.xml
+VIDEO_FORMAT=NTSC dvdauthor -o "$outdir" -x "$state"/dvd.xml
 )
 
-$here/burn-dvd.sh $outdir "${DVD_TITLE:-}"
+"$here"/burn-dvd.sh "$outdir" "${DVD_TITLE:-}"
 )
 
 echo >&2 -n "Result: "
-realpath $outdir
+realpath "$outdir"

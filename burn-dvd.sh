@@ -8,5 +8,5 @@ title=${2?"Supply a title for the DVD"}
 
 iso=$(mktemp -d)/dvd.iso
 trap "rm $iso" EXIT
-mkisofs -dvd-video -output $iso -volid "$title" "$dir"
-hdiutil burn -nosynthesize -noverifyburn -forceclose $iso
+mkisofs -dvd-video -output "$iso" -volid "$title" "$dir"
+hdiutil burn -nosynthesize -noverifyburn -forceclose "$iso"

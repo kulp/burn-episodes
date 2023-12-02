@@ -43,4 +43,4 @@ dd if=/dev/zero bs=4 count=1000 |
 mplex -f 8 -o /dev/stdout black.m2v output.m2a |
     spumux menu.xml > menu.mpg
 )
-realpath --relative-to=$orig_pwd menu.mpg
+realpath --relative-to="$orig_pwd" menu.mpg
