@@ -3,6 +3,12 @@
 # Fail early and loudly.
 set -o errexit -o nounset -o pipefail
 
+if ! (( $# ))
+then
+    echo >&2 "$0: Supply at least one video file."
+    exit 64 # EX_USAGE
+fi
+
 here=$(dirname "$0")
 tempbase=$(mktemp -d dvdauthor.XXXXXX)
 outdir=$tempbase/dvd
