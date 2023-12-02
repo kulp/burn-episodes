@@ -9,10 +9,10 @@ outdir=$tempbase/dvd
 state=$tempbase/tmp
 
 (
-trap "rm -rf $outdir" EXIT
+trap 'rm -rf "$outdir"' EXIT
 
 (
-trap "rm -rf $state" EXIT
+trap 'rm -rf "$state"' EXIT
 
 mkdir -p "$outdir" "$state"
 echo >&2 "Generating output in $outdir"

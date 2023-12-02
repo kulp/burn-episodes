@@ -5,15 +5,17 @@ set -o errexit -o nounset -o pipefail
 
 filenames=( "$@" )
 
+# shellcheck disable=SC2120
 remove_last_newline ()
 {
     perl -ne 'print $last if $.>1; $last = $_; END{chomp $last; print $last}' "$@"
 }
 
 orig_pwd=$(pwd)
-cd $(mktemp -d menu.XXXXXX)
+cd "$(mktemp -d menu.XXXXXX)"
 
 spacing=10
+# shellcheck disable=SC2119
 basename -a "${filenames[@]%.*}" |
     remove_last_newline |
     # Without a `-trim`, interlinear spacing of 10 seems to work, but that is probably at best a happy accident.
