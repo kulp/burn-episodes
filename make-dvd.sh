@@ -43,7 +43,7 @@ do
     echo >&2 "Converting $f ..."
     out="$state/$(basename "${f%.???}").mpg"
     (
-        absolute="$(realpath "$out")"
+        absolute="$PWD/$out"
         cd "$(mktemp -d "$state"/mpg.XXXXXX)"
         if [[ ${TWOPASS:-} ]]
         then
@@ -91,4 +91,4 @@ VIDEO_FORMAT=NTSC dvdauthor -o "$outdir" -x "$state"/dvd.xml
 )
 
 echo >&2 -n "Result: "
-realpath "$outdir"
+echo "$PWD/$outdir"
