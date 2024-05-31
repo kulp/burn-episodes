@@ -87,12 +87,8 @@ echo >&2 "Authoring DVD ..."
 VIDEO_FORMAT=NTSC dvdauthor -o "$outdir" -x "$state"/dvd.xml
 ) >&2
 
-(
-iso=$tempbase/dvd.iso
-trap 'rm "$iso"' EXIT
-
-mkisofs -dvd-video -output "$iso" -volid "${DVD_TITLE:-}" "$outdir"
+final=$(mktemp -d final.iso.XXXXXX)/dvd.iso
+mkisofs -dvd-video -output "$final" -volid "${DVD_TITLE:-}" "$outdir"
 echo >&2 -n "Created ISO: "
-echo "$PWD/$iso"
-)
+echo "$final"
 )
