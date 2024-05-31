@@ -87,8 +87,12 @@ echo >&2 "Authoring DVD ..."
 VIDEO_FORMAT=NTSC dvdauthor -o "$outdir" -x "$state"/dvd.xml
 )
 
-"$here"/burn-dvd.sh "$outdir" "${DVD_TITLE:-}"
-)
+(
+iso=$tempbase/dvd.iso
+trap 'rm "$iso"' EXIT
 
-echo >&2 -n "Result: "
-echo "$PWD/$outdir"
+mkisofs -dvd-video -output "$iso" -volid "${DVD_TITLE:-}" "$outdir"
+echo >&2 -n "Created ISO: "
+echo "$PWD/$iso"
+)
+)
