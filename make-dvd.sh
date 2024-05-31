@@ -85,7 +85,7 @@ EOF
 
 echo >&2 "Authoring DVD ..."
 VIDEO_FORMAT=NTSC dvdauthor -o "$outdir" -x "$state"/dvd.xml
-)
+) >&2
 
 (
 iso=$tempbase/dvd.iso
