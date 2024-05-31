@@ -13,9 +13,11 @@ remove_last_newline ()
 
 cd "$(mktemp -d "${BASE:-.}/menu.XXXXXX")"
 
+maxlen=70
 spacing=10
 # shellcheck disable=SC2119
 basename -a "${filenames[@]%.*}" |
+    sed -r "s@((.{$((maxlen - 3))}).*)@"'\2...@' |
     remove_last_newline |
     # Without a `-trim`, interlinear spacing of 10 seems to work, but that is probably at best a happy accident.
     # For `png:color-type=3` see PNG color depth: https://www.w3.org/TR/png/#11IHDR
