@@ -11,18 +11,13 @@ fi
 
 here=$(dirname "$0")
 tempbase=$(mktemp -d dvdauthor.XXXXXX)
+trap 'rm -rf "$tempbase"' EXIT
 outdir=$tempbase/dvd
 state=$tempbase/tmp
 
 (
-trap 'rm -rf "$outdir"' EXIT
-
-(
-trap 'rm -rf "$state"' EXIT
-
 mkdir -p "$outdir" "$state"
 echo >&2 "Generating output in $outdir"
-echo >&2 "Temporary files are in $state"
 
 converted=( )
 
@@ -58,7 +53,7 @@ do
 done
 
 echo >&2 "Making menus ..."
-menu_mpg=$("$here"/make-menu.sh "${converted[@]}")
+menu_mpg=$(BASE="$tempbase" "$here"/make-menu.sh "${converted[@]}")
 
 cat > "$state"/dvd.xml <<EOF
 <?xml version="1.0"?>
@@ -91,4 +86,3 @@ final=$(mktemp -d final.iso.XXXXXX)/dvd.iso
 mkisofs -dvd-video -output "$final" -volid "${DVD_TITLE:-}" "$outdir"
 echo >&2 -n "Created ISO: "
 echo "$final"
-)

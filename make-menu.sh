@@ -11,7 +11,7 @@ remove_last_newline ()
     perl -ne 'print $last if $.>1; $last = $_; END{chomp $last; print $last}' "$@"
 }
 
-cd "$(mktemp -d menu.XXXXXX)"
+cd "$(mktemp -d "${BASE:-.}/menu.XXXXXX")"
 
 spacing=10
 # shellcheck disable=SC2119
